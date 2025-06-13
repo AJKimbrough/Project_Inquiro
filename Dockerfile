@@ -11,4 +11,5 @@ COPY . .
 RUN ./mvnw clean install -DskipTests
 
 # Run the jar file
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["java", "-jar", "target/inquiro-0.0.1-SNAPSHOT.jar"]
+
