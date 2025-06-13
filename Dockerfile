@@ -4,7 +4,7 @@ FROM eclipse-temurin:17-jdk-alpine
 # Set working directory inside the container
 WORKDIR /app
 
-# Copy everything from your project to /app
+# Copy everything from project to /app
 COPY . .
 
 # Build the application using Maven
