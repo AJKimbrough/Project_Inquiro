@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Inquiro</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .top-nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 15px 30px;
+    }
+
+    .top-nav a {
+      color: white;
+      font-size: 1.5rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      width: 200px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-nav">
+    <a href="/">Inquiro</a>
+  </div>
+
+  <div class="container">
+    <h1>Login</h1>
+    <form action="#" method="post">
+      <div><input type="text" placeholder="Username" required></div>
+      <div><input type="password" placeholder="Password" required></div>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</body>
+</html>

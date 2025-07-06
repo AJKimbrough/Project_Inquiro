@@ -3,14 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <title>Project Inquiro</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* NavBar */
+    nav {
+      background-color: #111;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+      border-bottom: 1px solid #333;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #00aaff;
+    }
+
+    /* Centered content */
+    .content {
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    .content h1 {
+      margin-bottom: 10px;
+    }
+
+    .content h1 a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .content h1 a:hover {
+      text-decoration: underline;
+    }
+
+    /* Expandable Search Form */
+    .search-form {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      margin-top: 30px;
+    }
+
+    .search-input-wrapper {
+      background-color: white;
+      border-radius: 30px;
+      overflow: hidden;
+      width: 60px;
+      height: 50px;
+      transition: width 0.4s ease;
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+    }
+
+    .search-input-wrapper:hover,
+    .search-input-wrapper:focus-within {
+      width: 320px;
+    }
+
+    .search-input-wrapper input[type="text"] {
+      border: none;
+      outline: none;
+      padding: 10px 15px;
+      flex-grow: 1;
+      font-size: 1rem;
+      background-color: transparent;
+      color: black;
+    }
+
+    .search-input-wrapper button {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      height: 100%;
+      border-radius: 0 30px 30px 0;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .search-input-wrapper button:hover {
+      background-color: #222;
+    }
+  </style>
 </head>
 <body>
-  <h1>🔍 Welcome to Project Inquiro</h1>
-  <p>Home</p>
 
-  <form action="/search" method="get">
-    <input type="text" name="query" placeholder="Enter your search term..." />
-    <button type="submit">Search</button>
-  </form>
+  <nav>
+    <a href="/login">Login</a>
+    <a href="/image">Image</a>
+    <a href="/history">History</a>
+  </nav>
+
+  <div class="content">
+    <h1><a href="/">Inquiro</a></h1>
+    <p>Discover. Explore. Inquiro.</p>
+
+    <div class="search-form">
+      <form action="/search" method="get" class="search-input-wrapper">
+        <input type="text" name="query" placeholder="Uncover what matters..." required />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>

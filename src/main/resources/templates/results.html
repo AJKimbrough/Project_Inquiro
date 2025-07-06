@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Search Results</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 60px 40px 40px 40px;
+    }
+
+    .top-nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 15px 30px;
+    }
+
+    .top-nav a {
+      color: white;
+      font-size: 1.5rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .search-form-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .search-form input[type="text"] {
+      padding: 8px 12px;
+      border-radius: 6px 0 0 6px;
+      border: none;
+      font-size: 1rem;
+      width: 250px;
+    }
+
+    .search-form button {
+      padding: 8px 16px;
+      border: none;
+      background-color: #00aaff;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+    }
+
+    .result {
+      background-color: #111;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    .result a {
+      color: #00aaff;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .result a:hover {
+      text-decoration: underline;
+    }
+
+    .description {
+      margin-top: 5px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-nav">
+    <a href="/">Inquiro</a>
+  </div>
+
+  <h1>Search Results for <span th:text="${query}"></span></h1>
+
+  <div class="search-form-container">
+    <form th:action="@{/search}" method="get" class="search-form">
+      <input type="text" name="query" placeholder="Search again..." required>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <div th:if="${#lists.isEmpty(results)}">
+    <p>No results found.</p>
+  </div>
+
+  <div th:each="result : ${results}" class="result">
+    <a th:href="${result.url}" th:text="${result.title}" target="_blank"></a>
+    <div class="description" th:text="${result.description}"></div>
+  </div>
+
+</body>
+</html>
