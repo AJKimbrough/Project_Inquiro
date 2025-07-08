@@ -47,14 +47,21 @@
 
     .search-form button {
       padding: 8px 16px;
-      border: none;
-      background-color: #00aaff;
-      color: white;
+      border: 1px solid #00aaff;
+      background-color: black;
+      color: #00aaff;
       font-weight: bold;
       font-size: 1rem;
       border-radius: 0 6px 6px 0;
       cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
+
+.search-form button:hover {
+  background-color: #00aaff;
+  color: black;
+}
+
 
     .result {
       background-color: #111;
@@ -78,6 +85,28 @@
       font-size: 0.9rem;
       color: #ccc;
     }
+
+    /* Style the AND/OR/NOT dropdown */
+  .search-form select {
+    background-color: black;
+    color: white;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 0 0 0 30px;
+    font-size: 1rem;
+    outline: none;
+    appearance: none;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+.search-input-wrapper select:hover {
+  border-color: #00aaff;
+  background-color: #111;
+}
+
+
   </style>
 </head>
 <body>
@@ -91,6 +120,11 @@
   <div class="search-form-container">
     <form th:action="@{/search}" method="get" class="search-form">
       <input type="text" name="query" placeholder="Search again..." required>
+      <select name="mode">
+        <option value="OR">OR</option>
+        <option value="AND">AND</option>
+        <option value="NOT">NOT</option>
+      </select>
       <button type="submit">Search</button>
     </form>
   </div>

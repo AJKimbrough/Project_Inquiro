@@ -17,10 +17,13 @@ public class SearchController {
     private SearchService searchService;
 
     @GetMapping("/search")
-    public String search(@RequestParam("query") String query, Model model) {
-        List<SearchResult> results = searchService.search(query);
+    public String search(@RequestParam("query") String query,
+                         @RequestParam(value = "mode", defaultValue = "OR") String mode,
+                         Model model) {
+        List<SearchResult> results = searchService.search(query, mode);
         model.addAttribute("results", results);
         model.addAttribute("query", query);
+        model.addAttribute("mode", mode);
         return "results";
     }
 }

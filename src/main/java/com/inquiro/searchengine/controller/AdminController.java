@@ -1,0 +1,21 @@
+package com.inquiro.searchengine.controller;
+
+import com.inquiro.searchengine.service.SearchService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class AdminController {
+
+    @Autowired
+    private SearchService searchService;
+
+    @GetMapping("/admin/cleanup")
+    public String cleanupOutdated(Model model) {
+        searchService.deleteOutdatedUrls();
+        model.addAttribute("message", "Out-of-date URLs removed successfully.");
+        return "admin"; // Optional admin.html Thymeleaf view
+    }
+}

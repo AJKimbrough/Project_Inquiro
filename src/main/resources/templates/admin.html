@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Cleanup – Project Inquiro</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: #111;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+      border-bottom: 1px solid #333;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #00aaff;
+    }
+
+    .content {
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    .content h1 {
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    li {
+      background-color: #222;
+      padding: 10px 20px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border-left: 5px solid #ff4444;
+      text-align: left;
+    }
+
+    .success {
+      color: #00ff88;
+      font-weight: bold;
+    }
+
+    .url {
+      color: #ffaa88;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/">Home</a>
+  <a href="/login">Login</a>
+  <a href="/image">Image</a>
+  <a href="/history">History</a>
+</nav>
+
+<div class="content">
+  <h1>Cleanup Summary</h1>
+
+  <ul>
+    <li th:each="url : ${deletedUrls}">
+      <span class="url" th:text="${url}"></span> was removed from the database.
+    </li>
+    <li th:if="${#lists.isEmpty(deletedUrls)}" class="success">All URLs are valid. No deletions were made. ✅ ✅ ✅ ✅ </li>
+  </ul>
+</div>
+
+</body>
+</html>

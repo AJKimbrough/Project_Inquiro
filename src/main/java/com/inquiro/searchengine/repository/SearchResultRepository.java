@@ -11,15 +11,32 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
 
     @Query("""
         SELECT r FROM SearchResult r
-        WHERE LOWER(r.keyword) LIKE LOWER(CONCAT('%', :keywordPart, '%'))
-          AND (
-               LOWER(r.title) LIKE LOWER(CONCAT('%', :term, '%'))
-            OR LOWER(r.description) LIKE LOWER(CONCAT('%', :term, '%'))
-          )
-        ORDER BY r.id ASC
+        WHERE LOWER(r.keyword) LIKE %:term%
+           OR LOWER(r.title) LIKE %:term%
+           OR LOWER(r.description) LIKE %:term%
+        ORDER BY r.title ASC
     """)
-    List<SearchResult> searchFlexible(
-        @Param("keywordPart") String keywordPart,
-        @Param("term") String term
-    );
+    List<SearchResult> searchWithOr(@Param("term") String term);
+
+    @Query("""
+        SELECT r FROM SearchResult r
+        WHERE LOWER(r.keyword) LIKE %:term%
+          AND LOWER(r.title) LIKE %:term%
+          AND LOWER(r.description) LIKE %:term%
+        ORDER BY r.title ASC
+    """)
+    List<SearchResult> searchWithAnd(@Param("term") String term);
+
+    @Query("""
+        SELECT r FROM SearchResult r
+        WHERE LOWER(r.keyword) NOT LIKE %:term%
+          AND LOWER(r.title) NOT LIKE %:term%
+          AND LOWER(r.description) NOT LIKE %:term%
+        ORDER BY r.title ASC
+    """)
+    List<SearchResult> searchWithNot(@Param("term") String term);
+
+    // 🔧 Add this to support typo correction/autofill
+    @Query("SELECT DISTINCT LOWER(r.keyword) FROM SearchResult r")
+    List<String> findAllKeywords();
 }
