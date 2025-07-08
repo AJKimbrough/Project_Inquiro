@@ -12,7 +12,7 @@
       padding: 0;
     }
 
-    /* NavBar */
+    /* Navigation bar at top of page */
     nav {
       background-color: #111;
       padding: 15px 30px;
@@ -72,11 +72,13 @@
       padding: 0 5px;
     }
 
+     /* Expand search input on interaction */
     .search-input-wrapper:hover,
     .search-input-wrapper:focus-within {
       width: 320px;
     }
 
+    /* Search text field */
     .search-input-wrapper input[type="text"] {
       border: none;
       outline: none;
@@ -87,6 +89,7 @@
       color: black;
     }
 
+    /* Search button styling */
     .search-input-wrapper button {
       background-color: black;
       color: white;
@@ -103,7 +106,7 @@
       background-color: #222;
     }
 
-    /* Style the AND/OR/NOT dropdown */
+    /* Style AND/OR/NOT dropdown */
   .search-input-wrapper select {
     background-color: black;
     color: white;
@@ -128,16 +131,19 @@
 </head>
 <body>
 
+   <!-- Navigation links to login, image, and history pages -->
   <nav>
     <a href="/login">Login</a>
     <a href="/image">Image</a>
     <a href="/history">History</a>
   </nav>
 
+  <!-- Centered header and search form -->
   <div class="content">
     <h1><a href="/">Inquiro</a></h1>
     <p>Discover. Explore. Inquiro.</p>
 
+    <!-- Search input form with Boolean logic selector -->
     <div class="search-form">
       <form action="/search" method="get" class="search-input-wrapper">
         <input type="text" name="query" placeholder="Uncover what matters..." required />

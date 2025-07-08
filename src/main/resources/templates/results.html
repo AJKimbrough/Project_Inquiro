@@ -12,6 +12,7 @@
       padding: 60px 40px 40px 40px;
     }
 
+    /* Top-left navigation link */
     .top-nav {
       position: absolute;
       top: 0;
@@ -26,17 +27,20 @@
       font-weight: bold;
     }
 
+    /* Page heading */
     h1 {
       text-align: center;
       margin-bottom: 10px;
     }
 
+     /* Search form layout */
     .search-form-container {
       display: flex;
       justify-content: center;
       margin-bottom: 30px;
     }
 
+    /* Text input styling */
     .search-form input[type="text"] {
       padding: 8px 12px;
       border-radius: 6px 0 0 6px;
@@ -45,6 +49,7 @@
       width: 250px;
     }
 
+    /* Search button styling */
     .search-form button {
       padding: 8px 16px;
       border: 1px solid #00aaff;
@@ -63,6 +68,7 @@
 }
 
 
+    /* Result styling */
     .result {
       background-color: #111;
       padding: 15px;
@@ -86,7 +92,7 @@
       color: #ccc;
     }
 
-    /* Style the AND/OR/NOT dropdown */
+  /* Style the AND/OR/NOT dropdown */
   .search-form select {
     background-color: black;
     color: white;
@@ -111,12 +117,15 @@
 </head>
 <body>
 
+  <!-- Top-left navigation link -->
   <div class="top-nav">
     <a href="/">Inquiro</a>
   </div>
 
+  <!-- Search result display -->
   <h1>Search Results for <span th:text="${query}"></span></h1>
 
+  <!-- Search bar -->
   <div class="search-form-container">
     <form th:action="@{/search}" method="get" class="search-form">
       <input type="text" name="query" placeholder="Search again..." required>
@@ -133,6 +142,7 @@
     <p>No results found.</p>
   </div>
 
+  <!-- Loop through and display each search result -->
   <div th:each="result : ${results}" class="result">
     <a th:href="${result.url}" th:text="${result.title}" target="_blank"></a>
     <div class="description" th:text="${result.description}"></div>

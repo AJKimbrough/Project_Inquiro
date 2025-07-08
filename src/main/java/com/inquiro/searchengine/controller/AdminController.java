@@ -6,16 +6,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+// Spring MVC controller for Admin
 @Controller
 public class AdminController {
 
-    @Autowired
+    @Autowired //Injects SearchService dependency to handle business logic
     private SearchService searchService;
 
-    @GetMapping("/admin/cleanup")
+    @GetMapping("/admin/cleanup") // GET requests to /admin/cleanup
     public String cleanupOutdated(Model model) {
-        searchService.deleteOutdatedUrls();
+        searchService.deleteOutdatedUrls(); // Service method to delete unreachable or outdated URLs
         model.addAttribute("message", "Out-of-date URLs removed successfully.");
-        return "admin"; // Optional admin.html Thymeleaf view
+        return "admin"; // Thymeleaf template
     }
 }

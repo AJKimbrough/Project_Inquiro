@@ -7,8 +7,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+
+// Extends JpaRepository to provide CRUD operations and custom query methods for the SearchResult entity
 public interface SearchResultRepository extends JpaRepository<SearchResult, Long> {
 
+    // Searches for results where the keyword OR title OR description contains the search term (case-insensitive)
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) LIKE %:term%
@@ -18,6 +21,7 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
     """)
     List<SearchResult> searchWithOr(@Param("term") String term);
 
+    // Searches for results where ALL of the keyword, title, and description contain the search term (case-insensitive).
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) LIKE %:term%
@@ -27,6 +31,7 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
     """)
     List<SearchResult> searchWithAnd(@Param("term") String term);
 
+    // Searches for results where NONE of the keyword, title, or description contain the search term (case-insensitive). Excludes results matching term.
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) NOT LIKE %:term%
@@ -36,7 +41,7 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
     """)
     List<SearchResult> searchWithNot(@Param("term") String term);
 
-    // 🔧 Add this to support typo correction/autofill
+    // Used for typo correction and autofill suggestions and returns a distinct list of all lowercase keywords stored in the database. 
     @Query("SELECT DISTINCT LOWER(r.keyword) FROM SearchResult r")
     List<String> findAllKeywords();
 }
