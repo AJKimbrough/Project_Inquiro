@@ -33,7 +33,7 @@
       margin-bottom: 10px;
     }
 
-     /* Search form layout */
+    /* Search form layout */
     .search-form-container {
       display: flex;
       justify-content: center;
@@ -62,13 +62,12 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-.search-form button:hover {
-  background-color: #00aaff;
-  color: black;
-}
+    .search-form button:hover {
+      background-color: #00aaff;
+      color: black;
+    }
 
-
-    /* Result styling */
+    /* Individual result card styling */
     .result {
       background-color: #111;
       padding: 15px;
@@ -76,6 +75,7 @@
       border-radius: 10px;
     }
 
+    /* Link to the result */
     .result a {
       color: #00aaff;
       text-decoration: none;
@@ -86,33 +86,41 @@
       text-decoration: underline;
     }
 
+    /* Description below each result */
     .description {
       margin-top: 5px;
       font-size: 0.9rem;
       color: #ccc;
     }
 
-  /* Style the AND/OR/NOT dropdown */
-  .search-form select {
-    background-color: black;
-    color: white;
-    border: 1px solid #333;
-    padding: 10px;
-    border-radius: 0 0 0 30px;
-    font-size: 1rem;
-    outline: none;
-    appearance: none;
-    margin-right: 8px;
-    cursor: pointer;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-  }
+    /* Label showing which engine produced the result */
+    .source {
+      margin-top: 5px;
+      font-size: 0.8rem;
+      color: #999;
+      font-style: italic;
+    }
 
-.search-input-wrapper select:hover {
-  border-color: #00aaff;
-  background-color: #111;
-}
+    /* Style the AND/OR/NOT dropdown */
+    .search-form select {
+      background-color: black;
+      color: white;
+      border: 1px solid #333;
+      padding: 10px;
+      border-radius: 0 0 0 30px;
+      font-size: 1rem;
+      outline: none;
+      appearance: none;
+      margin-right: 8px;
+      cursor: pointer;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+    }
 
-
+    /* Hover effect for dropdown */
+    .search-input-wrapper select:hover {
+      border-color: #00aaff;
+      background-color: #111;
+    }
   </style>
 </head>
 <body>
@@ -122,10 +130,10 @@
     <a href="/">Inquiro</a>
   </div>
 
-  <!-- Search result display -->
+  <!-- Search result heading -->
   <h1>Search Results for <span th:text="${query}"></span></h1>
 
-  <!-- Search bar -->
+  <!-- Search form to allow users to search again -->
   <div class="search-form-container">
     <form th:action="@{/search}" method="get" class="search-form">
       <input type="text" name="query" placeholder="Search again..." required>
@@ -138,15 +146,19 @@
     </form>
   </div>
 
+  <!-- Message if no results are found -->
   <div th:if="${#lists.isEmpty(results)}">
     <p>No results found.</p>
   </div>
 
   <!-- Loop through and display each search result -->
-  <div th:each="result : ${results}" class="result">
-    <a th:href="${result.url}" th:text="${result.title}" target="_blank"></a>
-    <div class="description" th:text="${result.description}"></div>
-  </div>
+<p>Showing results for "<span th:text="${query}"></span>"</p>
+<div th:each="result : ${results}" class="result">
+  <a th:href="${result.url}" th:text="${result.title}" target="_blank"></a>
+  <div class="description" th:text="${result.description}"></div>
+  <div class="description">Engine: <span th:text="${result.engine}"></span></div>
+</div>
+
 
 </body>
 </html>

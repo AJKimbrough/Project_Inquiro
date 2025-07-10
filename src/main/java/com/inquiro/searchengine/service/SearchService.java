@@ -1,48 +1,86 @@
 package com.inquiro.searchengine.service;
 
+import com.inquiro.searchengine.dto.SearchResultWithSource;
 import com.inquiro.searchengine.model.SearchResult;
 import com.inquiro.searchengine.repository.SearchResultRepository;
 import com.inquiro.searchengine.util.URLValidation;
-
-import org.antlr.v4.runtime.atn.SemanticContext.OR;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.*;
 
-@Service
+@Service // Spring service component
 public class SearchService {
 
-    @Autowired
+    @Autowired // Injects the repository to access the database
     private SearchResultRepository repository;
 
-    // Main search logic, AND, OR, and NOT. Includes typo correction for terms.
-    public List<SearchResult> search(String query, String mode) {
-        String cleanQuery = query.trim().replaceAll("[^a-zA-Z0-9\\s]", "").toLowerCase(); // Normalize and clean the input query string
-        List<String> keywords = getAllStoredKeywords(); // Keyword pool for typo correction
+    public List<SearchResultWithSource> search(String query, String mode) {
+        // Remove special characters, symbols and convert to lowercase
+        String cleanQuery = query.trim().replaceAll("[^a-zA-Z0-9\\s]", "").toLowerCase();
+        List<String> keywords = getAllStoredKeywords(); // List of known keywords
 
-        // Typo correction for each word in the query
+        // Autocorrect each word in query
         List<String> correctedWords = new ArrayList<>();
         for (String word : cleanQuery.split("\\s+")) {
             correctedWords.add(findClosestKeyword(word, keywords));
         }
 
-        // Autocorrect each word in the query individually
+        // Join corrected words into string
         String correctedQuery = String.join(" ", correctedWords);
-        if (!correctedQuery.equalsIgnoreCase(cleanQuery)) {
+        boolean wasCorrected = !correctedQuery.equalsIgnoreCase(cleanQuery);
+        if (wasCorrected) {
             System.out.println("Autocorrected '" + cleanQuery + "' to '" + correctedQuery + "'");
         }
 
-        // Select right mode
-        return switch (mode.toUpperCase()) {
-            case "AND" -> searchAllWordsIndividually(correctedWords);
-            case "NOT" -> repository.searchWithNot(correctedQuery);
-            default -> repository.searchWithOr(correctedQuery); // OR is default
-        };
+        try {
+            ExecutorService executor = Executors.newFixedThreadPool(2); // Thread pool for concurrent engine execution
+
+            // Engine 1: Exact keyword match
+            Callable<List<SearchResultWithSource>> exactMatchEngine = () -> {
+                List<SearchResult> results = switch (mode.toUpperCase()) {
+                    case "AND" -> searchEachWordSeparately(Arrays.asList(cleanQuery.split("\\s+")));
+                    case "NOT" -> repository.searchWithNot(cleanQuery);
+                    default -> searchEachWordSeparately(Arrays.asList(cleanQuery.split("\\s+")));
+                };
+                return wrapResultsWithEngine(results, "ExactMatch");
+            };
+
+            // Engine 2: Autocorrected search, only runs if correction occurred
+            Callable<List<SearchResultWithSource>> autocorrectEngine = () -> {
+                if (!wasCorrected) return Collections.emptyList();
+                List<SearchResult> results = repository.searchWithOr(correctedQuery);
+                return wrapResultsWithEngine(results, "AutoCorrectEngine");
+            };
+
+            // Submit tasks to thread pool and retrieve futures
+            Future<List<SearchResultWithSource>> exactFuture = executor.submit(exactMatchEngine);
+            Future<List<SearchResultWithSource>> autoFuture = executor.submit(autocorrectEngine);
+
+            // Combine results 
+            List<SearchResultWithSource> combined = new ArrayList<>();
+            combined.addAll(exactFuture.get());
+            combined.addAll(autoFuture.get());
+
+            executor.shutdown();
+
+            // Remove duplicate URLs
+            Map<String, SearchResultWithSource> deduped = new LinkedHashMap<>();
+            for (SearchResultWithSource r : combined) {
+                deduped.putIfAbsent(r.getUrl(), r);
+            }
+
+            return new ArrayList<>(deduped.values());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
-    // Performs multiple OR searches for each individual term and merges the results
-    private List<SearchResult> searchAllWordsIndividually(List<String> words) {
+    // OR Logic Query 
+    private List<SearchResult> searchEachWordSeparately(List<String> words) {
         Set<SearchResult> combinedResults = new LinkedHashSet<>();
         for (String word : words) {
             combinedResults.addAll(repository.searchWithOr(word));
@@ -50,14 +88,12 @@ public class SearchService {
         return new ArrayList<>(combinedResults);
     }
 
-    // Typo correction, simulated keyword pool
+    // Hardcoded keywords, autocorrect 
     private List<String> getAllStoredKeywords() {
-        return Arrays.asList(
-            "java", "html", "utd", "ai", "dallas", "music", "engineering", "jobs", "openai", "google", "spotify"
-        );
+        return Arrays.asList("java", "html", "utd", "ai", "dallas", "music", "engineering", "jobs", "openai", "google", "spotify");
     }
 
-    // Finds keyword with the smallest Levenshtein distance to the input query. Returns the original if no match.
+    // Levenshtein distance, closest matching keyword using 
     private String findClosestKeyword(String query, List<String> keywords) {
         int minDistance = Integer.MAX_VALUE;
         String bestMatch = query;
@@ -73,8 +109,7 @@ public class SearchService {
         return (minDistance <= 2) ? bestMatch : query;
     }
 
-    // Levenshtein Distance algorithm, measures edit distance between two strings.
-    // Minimum number of single-character edits (insertions, deletions, or substitutions) needed to transform one string into another.
+    // Levenshtein distance between two strings
     private int computeLevenshtein(String s1, String s2) {
         int[][] dp = new int[s1.length() + 1][s2.length() + 1];
 
@@ -98,7 +133,16 @@ public class SearchService {
         return dp[s1.length()][s2.length()];
     }
 
-    // Outdated URL Deletion. Deletes any search results with unreachable URLs. - admin
+    // Wraps results with engine label for UI display
+    private List<SearchResultWithSource> wrapResultsWithEngine(List<SearchResult> results, String engine) {
+        List<SearchResultWithSource> wrapped = new ArrayList<>();
+        for (SearchResult r : results) {
+            wrapped.add(new SearchResultWithSource(r, engine));  // ✅ fixed constructor usage
+        }
+        return wrapped;
+    }
+
+    //URL Validation, remove unreachable URLs
     public void deleteOutdatedUrls() {
         List<SearchResult> allResults = repository.findAll();
         for (SearchResult result : allResults) {

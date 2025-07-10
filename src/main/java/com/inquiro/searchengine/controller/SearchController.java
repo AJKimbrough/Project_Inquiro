@@ -1,6 +1,6 @@
 package com.inquiro.searchengine.controller;
 
-import com.inquiro.searchengine.model.SearchResult;
+import com.inquiro.searchengine.dto.SearchResultWithSource;
 import com.inquiro.searchengine.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,22 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-// Spring MVC controller search functionality
-@Controller
+@Controller // Spring MVC Controller
 public class SearchController {
 
-    // Injects the SearchService dependency to handle business logic
-    @Autowired
+    @Autowired // Inject the SearchService instance to handle business logic
     private SearchService searchService;
 
-    // GET requests to /search
-    @GetMapping("/search")
+    @GetMapping("/search") // HTTP GET requests
     public String search(@RequestParam("query") String query,
                          @RequestParam(value = "mode", defaultValue = "OR") String mode,
                          Model model) {
-        List<SearchResult> results = searchService.search(query, mode); // Search operation to the service layer
+        List<SearchResultWithSource> results = searchService.search(query, mode); // Call the service layer to get search results with engine source labels
 
-        // Data to the model for rendering in the results
+        // Add results for view
         model.addAttribute("results", results);
         model.addAttribute("query", query);
         model.addAttribute("mode", mode);
