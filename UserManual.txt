@@ -26,4 +26,14 @@ Features
 - URL health checking
 
 
+Known keywords to use for searches
+*******************************************
+* "java", "html", "utd", "ai",            *
+*  "dallas", "music", "engineering",      *
+* "jobs", "openai", "google", "spotify",  *
+*  "cowboys", "wings", "mavericks",       *
+* "goldman", "sachs", "admissions",       *
+* "youtube", "spotify", "amazon",         *
+* "linkedin", "apple                      *
+*******************************************
 
