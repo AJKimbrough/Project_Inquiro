@@ -1,0 +1,28 @@
+USER MANUAL
+
+Inquiro: Search Engine
+
+Overview
+Inquiro is a Java-based web search engine built using Spring Boot and Thymeleaf. It supports multiple search modes (OR, AND, NOT), and includes an AutoCorrect feature.
+
+How to Use
+1. Go to the homepage.
+2. Enter your search term.
+3. Choose a search mode from the dropdown:
+   - OR: Match any word
+   - AND: Match all words
+   - NOT: Exclude the specified word(s)
+4. Click **Search** to see results.
+      ex. "dallas" "utd" select AND 
+      everything matching Dallas and UTD will be returned
+  
+5. If you misspell a word, the AutoCorrect engine may suggest corrected results.
+
+Features
+- Concurrent search engine execution
+- AutoCorrect fallback using Levenshtein distance
+- Result deduplication
+- URL health checking
+
+
+
