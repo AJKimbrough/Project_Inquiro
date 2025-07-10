@@ -27,13 +27,11 @@ mvn spring-boot:run
 
 🧪 How to Use
 1. Launch the application in a browser.
- 2. Enter a search term like 'ai music'.
+ 2. Enter a search term like 'utd engineering'.
  3. Select your search mode (OR, AND, or NOT).
  4. Press Search.
  5. View results labeled by their source engine.
-If the query contains typos, you'll see something like:
- Autocorrected 'ai misic' to 'ai music'
- Returning results for ai music
+
 
 🏗️ Tech Stack
 Backend: Spring Boot (Java 17)
