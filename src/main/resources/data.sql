@@ -36,7 +36,10 @@ INSERT INTO search_results (keyword, title, url, description) VALUES
 ('engineering jobs dallas', 'Indeed Engineering Jobs Dallas', 'https://www.indeed.com/q-software-engineer-l-dallas,-tx-jobs.html', 'Browse software engineering jobs in Dallas, TX on Indeed'),
 ('engineering jobs dallas', 'American Airlines Software Engineering Jobs Dallas', 'https://jobs.aa.com/go/Software-Engineer-Jobs-in-Dallas/2612500/', 'Software engineering careers at American Airlines'),
 ('engineering jobs dallas', 'Goldman Sachs Careers – Engineering Jobs Dallas', 'https://www.goldmansachs.com/careers/our-firm/engineering', 'Overview of the Engineering division at Goldman Sachs'),
-('engineering jobs dallas', 'Quantitative Analyst Engineering Jobs Dallas at AA', 'https://jobs.aa.com/go/Quantitative-Analyst-Jobs-in-Dallas/2605700/', 'Quantitative Analyst roles at American Airlines');
+('engineering jobs dallas', 'Quantitative Analyst Engineering Jobs Dallas at AA', 'https://jobs.aa.com/go/Quantitative-Analyst-Jobs-in-Dallas/2605700/', 'Quantitative Analyst roles at American Airlines'),
+('engineering jobs dallas', 'LinkedIn Engineering Careers', 'https://engineering.linkedin.com/', 'Explore engineering opportunities and culture at LinkedIn'),
+('engineering jobs dallas', 'Apple Engineering Opportunities', 'https://jobs.apple.com/en-us/details/200156495/apple-engineering-opportunities', 'Discover open roles for engineers at Apple'),
+('engineering jobs dallas', 'Amazon Fulfillment Engineering Jobs', 'https://www.amazon.jobs/teams/engineering-fulfillment', 'Work in operations and fulfillment engineering at Amazon');
 
 --AI RESULTS--
 INSERT INTO search_results (keyword, title, url, description) VALUES

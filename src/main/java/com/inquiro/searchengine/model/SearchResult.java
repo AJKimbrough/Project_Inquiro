@@ -1,6 +1,7 @@
 package com.inquiro.searchengine.model;
 
 import jakarta.persistence.*;
+import java.util.Objects;
 
 // JPA entity to be mapped to a database table
 @Entity
@@ -20,6 +21,7 @@ public class SearchResult {
 
     // Constructor required by JPA
     public SearchResult() {}
+
     // Constructor to create a SearchResult object with all fields except 'id'
     public SearchResult(String keyword, String title, String url, String description) {
         this.keyword = keyword;
@@ -68,5 +70,19 @@ public class SearchResult {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    // Override equals() and hashCode() to ensure proper Set behavior for AND search
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SearchResult)) return false;
+        SearchResult that = (SearchResult) o;
+        return url != null && url.equalsIgnoreCase(that.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url != null ? url.toLowerCase() : null);
     }
 }
