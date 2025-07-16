@@ -10,13 +10,14 @@ How to Use
 2. Enter your search term.
 3. Choose a search mode from the dropdown:
    - OR: Match any word
+         utd engineering will return all results with utd or engineering
    - AND: Match all words
+         utd engineering will return results with utd and engineering
    - NOT: Exclude the specified word(s)
+         utd engineering will return all results with utd but no results with engineering
 4. Click **Search** to see results.
-      ex. "dallas" "utd" select AND 
-      everything matching Dallas and UTD will be returned
   
-5. If you misspell a word, the AutoCorrect engine may suggest corrected results.
+5. If you misspell a word, the AutoCorrect engine will return corrected results.
 
 Features
 - Concurrent search engine execution
@@ -25,4 +26,14 @@ Features
 - URL health checking
 
 
+Known keywords to use for searches
+*******************************************
+* "java", "html", "utd", "ai",            *
+*  "dallas", "music", "engineering",      *
+* "jobs", "openai", "google", "spotify",  *
+*  "cowboys", "wings", "mavericks",       *
+* "goldman", "sachs", "admissions",       *
+* "youtube", "spotify", "amazon",         *
+* "linkedin", "apple                      *
+*******************************************
 
