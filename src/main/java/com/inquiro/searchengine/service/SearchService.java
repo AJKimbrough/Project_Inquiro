@@ -19,12 +19,12 @@ public class SearchService {
     // Main search method that handles query logic and parallel engine execution
     public List<SearchResultWithSource> search(String query, String mode) {
         String cleanQuery = query.trim().replaceAll("[^a-zA-Z0-9\\s]", "").toLowerCase(); // clean input
-        List<String> keywords = getAllStoredKeywords(); // reference keyword list
+        List<String> keywords = getKeywords(); // keyword list
 
         // Autocorrect find closest keywords for each word
         List<String> correctedWords = new ArrayList<>();
         for (String word : cleanQuery.split("\\s+")) {
-            correctedWords.add(findClosestKeyword(word, keywords));
+            correctedWords.add(findClosestMatch(word, keywords));
         }
 
         String correctedQuery = String.join(" ", correctedWords);
@@ -42,7 +42,7 @@ public class SearchService {
 
                 switch (mode.toUpperCase()) {
                     case "AND" -> {
-                        results = searchWithAnd(Arrays.asList(cleanQuery.split("\\s+")));
+                        results = andSearch(Arrays.asList(cleanQuery.split("\\s+")));
                     }
                     case "NOT" -> {
                     List<String> words = Arrays.asList(cleanQuery.split("\\s+"));
@@ -51,7 +51,7 @@ public class SearchService {
                     String includeTerm = words.get(0);  // include this term
                     List<String> excludeTerms = words.subList(1, words.size());  // exclude these
 
-                    List<SearchResult> baseResults = repository.searchWithOr(includeTerm);
+                    List<SearchResult> baseResults = repository.orSearch(includeTerm);
                     results = baseResults.stream()
                         .filter(result -> excludeTerms.stream().noneMatch(exclude ->
                                 result.getTitle().toLowerCase().contains(exclude) ||
@@ -61,19 +61,19 @@ public class SearchService {
                         .toList();
                     }
                     default -> {
-                        results = searchWithOr(Arrays.asList(cleanQuery.split("\\s+")));
+                        results = orSearch(Arrays.asList(cleanQuery.split("\\s+")));
                     }
                 }
 
-                return wrapResultsWithEngine(results, "ExactMatch");
+                return resultsWithEngine(results, "ExactMatch");
             };
 
 
             // Engine 2: Autocorrect query only runs if correction occurred
             Callable<List<SearchResultWithSource>> autocorrectEngine = () -> {
                 if (!wasCorrected) return Collections.emptyList();
-                List<SearchResult> results = repository.searchWithOr(correctedQuery);
-                return wrapResultsWithEngine(results, "AutoCorrectEngine");
+                List<SearchResult> results = repository.orSearch(correctedQuery);
+                return resultsWithEngine(results, "AutoCorrectEngine");
             };
 
             // Run engines concurrently
@@ -101,20 +101,20 @@ public class SearchService {
     }
 
     // OR union of all keyword matches
-    private List<SearchResult> searchWithOr(List<String> words) {
+    private List<SearchResult> orSearch(List<String> words) {
         Set<SearchResult> combinedResults = new LinkedHashSet<>();
         for (String word : words) {
-            combinedResults.addAll(repository.searchWithOr(word));
+            combinedResults.addAll(repository.orSearch(word));
         }
         return new ArrayList<>(combinedResults);
     }
 
     // AND intersection of keyword matches using OR-query results
-    private List<SearchResult> searchWithAnd(List<String> words) {
+    private List<SearchResult> andSearch(List<String> words) {
     List<Set<SearchResult>> resultSets = new ArrayList<>();
 
     for (String word : words) {
-        List<SearchResult> wordResults = repository.searchWithOr(word); // still using OR match
+        List<SearchResult> wordResults = repository.orSearch(word); // still using OR match
         resultSets.add(new HashSet<>(wordResults));
     }
 
@@ -131,12 +131,12 @@ public class SearchService {
 
 
     // Return list of known search keywords
-    private List<String> getAllStoredKeywords() {
+    private List<String> getKeywords() {
         return Arrays.asList("java", "html", "utd", "ai", "dallas", "music", "engineering", "jobs", "openai", "google", "spotify", "cowboys", "wings", "mavericks", "goldman", "sachs", "admissions", "youtube", "spotify", "amazon", "linkedin", "apple");
     }
 
     // Find closest keyword using Levenshtein distance
-    private String findClosestKeyword(String query, List<String> keywords) {
+    private String findClosestMatch(String query, List<String> keywords) {
         int minDistance = Integer.MAX_VALUE;
         String bestMatch = query;
 
@@ -169,7 +169,7 @@ public class SearchService {
     }
 
     // Wrap result with engine name for UI
-    private List<SearchResultWithSource> wrapResultsWithEngine(List<SearchResult> results, String engine) {
+    private List<SearchResultWithSource> resultsWithEngine(List<SearchResult> results, String engine) {
         List<SearchResultWithSource> wrapped = new ArrayList<>();
         for (SearchResult r : results) {
             wrapped.add(new SearchResultWithSource(r, engine));  // use SearchResult DTO wrapper

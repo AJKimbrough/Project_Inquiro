@@ -11,7 +11,7 @@ import java.util.List;
 // Extends JpaRepository to provide CRUD operations and custom query methods for the SearchResult entity
 public interface SearchResultRepository extends JpaRepository<SearchResult, Long> {
 
-    // Searches for results where the keyword OR title OR description contains the search term (case-insensitive)
+    // Searches results keyword OR title OR description is found in the query (case-insensitive)
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) LIKE %:term%
@@ -19,9 +19,9 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
            OR LOWER(r.description) LIKE %:term%
         ORDER BY r.title ASC
     """)
-    List<SearchResult> searchWithOr(@Param("term") String term);
+    List<SearchResult> orSearch(@Param("term") String term);
 
-    // Searches for results where ALL of the keyword, title, and description contain the search term (case-insensitive).
+    // Searches results ALL of keyword, title, and description contain the query (case-insensitive).
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) LIKE %:term%
@@ -29,9 +29,9 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
           AND LOWER(r.description) LIKE %:term%
         ORDER BY r.title ASC
     """)
-    List<SearchResult> searchWithAnd(@Param("term") String term);
+    List<SearchResult> andSearch(@Param("term") String term);
 
-    // Searches for results where NONE of the keyword, title, or description contain the search term (case-insensitive). Excludes results matching term.
+    // Searches results, NONE of keywords, title, or description contain term (case-insensitive). Excludes results matching term.
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) NOT LIKE %:term%
@@ -39,9 +39,9 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
           AND LOWER(r.description) NOT LIKE %:term%
         ORDER BY r.title ASC
     """)
-    List<SearchResult> searchWithNot(@Param("term") String term);
+    List<SearchResult> notSearch(@Param("term") String term);
 
     // Used for typo correction and autofill suggestions and returns a distinct list of all lowercase keywords stored in the database. 
     @Query("SELECT DISTINCT LOWER(r.keyword) FROM SearchResult r")
-    List<String> findAllKeywords();
+    List<String> findKeywords();
 }
