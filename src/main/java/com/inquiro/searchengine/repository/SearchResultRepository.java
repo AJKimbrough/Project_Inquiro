@@ -8,10 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 
-// Extends JpaRepository to provide CRUD operations and custom query methods for the SearchResult entity
+// Extends JpaRepository, CRUD operations, custom query methods for SearchResult 
 public interface SearchResultRepository extends JpaRepository<SearchResult, Long> {
 
-    // Searches results keyword OR title OR description is found in the query (case-insensitive)
+    // OR Search: keyword OR title OR description (case-insensitive)
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) LIKE %:term%
@@ -21,7 +21,7 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
     """)
     List<SearchResult> orSearch(@Param("term") String term);
 
-    // Searches results ALL of keyword, title, and description contain the query (case-insensitive).
+    // AND search: all of keyword, title, and description (case-insensitive).
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) LIKE %:term%
@@ -31,7 +31,7 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
     """)
     List<SearchResult> andSearch(@Param("term") String term);
 
-    // Searches results, NONE of keywords, title, or description contain term (case-insensitive). Excludes results matching term.
+    // NOT Search: none of keywords, title, or description (case-insensitive). ***Excludes results matching term.
     @Query("""
         SELECT r FROM SearchResult r
         WHERE LOWER(r.keyword) NOT LIKE %:term%
@@ -41,7 +41,7 @@ public interface SearchResultRepository extends JpaRepository<SearchResult, Long
     """)
     List<SearchResult> notSearch(@Param("term") String term);
 
-    // Used for typo correction and autofill suggestions and returns a distinct list of all lowercase keywords stored in the database. 
+    // typo correction and autofill suggestions 
     @Query("SELECT DISTINCT LOWER(r.keyword) FROM SearchResult r")
     List<String> findKeywords();
 }

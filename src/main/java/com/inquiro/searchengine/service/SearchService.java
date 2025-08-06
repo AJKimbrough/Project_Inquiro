@@ -16,7 +16,7 @@ public class SearchService {
     @Autowired
     private SearchResultRepository repository;
 
-    // Main search method that handles query logic and parallel engine execution
+    // Main search method handles query logic and parallel engine execution
     public List<SearchResultWithSource> search(String query, String mode) {
         String cleanQuery = query.trim().replaceAll("[^a-zA-Z0-9\\s]", "").toLowerCase(); // clean input
         List<String> keywords = getKeywords(); // keyword list

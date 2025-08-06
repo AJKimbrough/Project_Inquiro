@@ -3,14 +3,11 @@ package com.inquiro.searchengine.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-// Spring MVC controller for handling web page navigation
 @Controller
-public class PageController {
+public class AuthController {
 
-    // GET requests to "/login" returns login.html
     @GetMapping("/login")
-    public String loginPage() {
-        return "login";
+    public String login() {
+        return "login"; // resolves to templates/login.html
     }
-
 }

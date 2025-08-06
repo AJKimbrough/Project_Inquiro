@@ -12,19 +12,38 @@
       padding: 60px 40px 40px 40px;
     }
 
-    /* Top-left navigation link */
+    /* Top-left brand link */
     .top-nav {
       position: absolute;
       top: 0;
       left: 0;
       padding: 15px 30px;
     }
-
     .top-nav a {
       color: white;
       font-size: 1.5rem;
       text-decoration: none;
       font-weight: bold;
+    }
+
+    /* Top-right nav links */
+    .top-actions {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 15px 30px;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    .top-actions a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    .top-actions a:hover {
+      color: #00aaff;
     }
 
     /* Page heading */
@@ -39,8 +58,6 @@
       justify-content: center;
       margin-bottom: 30px;
     }
-
-    /* Text input styling */
     .search-form input[type="text"] {
       padding: 8px 12px;
       border-radius: 6px 0 0 6px;
@@ -48,8 +65,6 @@
       font-size: 1rem;
       width: 250px;
     }
-
-    /* Search button styling */
     .search-form button {
       padding: 8px 16px;
       border: 1px solid #00aaff;
@@ -61,47 +76,28 @@
       cursor: pointer;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
-
     .search-form button:hover {
       background-color: #00aaff;
       color: black;
     }
 
-    /* Individual result card styling */
+    /* Result */
     .result {
       background-color: #111;
       padding: 15px;
       margin-bottom: 20px;
       border-radius: 10px;
     }
-
-    /* Link to the result */
     .result a {
       color: #00aaff;
       text-decoration: none;
       font-size: 1.2rem;
     }
+    .result a:hover { text-decoration: underline; }
+    .description { margin-top: 5px; font-size: 0.9rem; color: #ccc; }
+    .source { margin-top: 5px; font-size: 0.8rem; color: #999; font-style: italic; }
 
-    .result a:hover {
-      text-decoration: underline;
-    }
-
-    /* Description below each result */
-    .description {
-      margin-top: 5px;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-
-    /* Label showing which engine produced the result */
-    .source {
-      margin-top: 5px;
-      font-size: 0.8rem;
-      color: #999;
-      font-style: italic;
-    }
-
-    /* Style the AND/OR/NOT dropdown */
+    /* Dropdown */
     .search-form select {
       background-color: black;
       color: white;
@@ -115,8 +111,6 @@
       cursor: pointer;
       transition: border-color 0.3s ease, background-color 0.3s ease;
     }
-
-    /* Hover effect for dropdown */
     .search-input-wrapper select:hover {
       border-color: #00aaff;
       background-color: #111;
@@ -124,16 +118,18 @@
   </style>
 </head>
 <body>
-
-  <!-- Top-left navigation link -->
   <div class="top-nav">
     <a href="/">Inquiro</a>
   </div>
 
-  <!-- Search result heading -->
+  <div class="top-actions">
+    <a href="/history">History</a>
+    <a th:if="${isAuthenticated == false}" href="/login">Login</a>
+    <a th:if="${isAuthenticated == true}" href="/logout">Logout</a>
+  </div>
+
   <h1>Search Results for <span th:text="${query}"></span></h1>
 
-  <!-- Search form to allow users to search again -->
   <div class="search-form-container">
     <form th:action="@{/search}" method="get" class="search-form">
       <input type="text" name="query" placeholder="Search again..." required>
@@ -146,19 +142,33 @@
     </form>
   </div>
 
-  <!-- Message if no results are found -->
   <div th:if="${#lists.isEmpty(results)}">
     <p>No results found.</p>
   </div>
 
-  <!-- Loop through and display each search result -->
-<p>Showing results for "<span th:text="${query}"></span>"</p>
-<div th:each="result : ${results}" class="result">
-  <a th:href="${result.url}" th:text="${result.title}" target="_blank"></a>
-  <div class="description" th:text="${result.description}"></div>
-  <div class="description">Engine: <span th:text="${result.engine}"></span></div>
-</div>
 
+  <p>Showing results for "<span th:text="${query}"></span>"
+    (<span th:text="${mode}"></span>)
+  </p>
+  <div th:each="result : ${results}" class="result">
+    <a th:href="${result.url}" th:text="${result.title}" target="_blank"></a>
+    <div class="description" th:text="${result.description}"></div>
+    <div class="description">Engine: <span th:text="${result.engine}"></span></div>
+  </div>
+
+  <div class="pagination" style="display:flex;gap:16px;justify-content:center;align-items:center;margin-top:20px;">
+    <a th:if="${hasPrev}"
+      th:href="@{/search(query=${query}, mode=${mode}, page=${currentPage - 1})}"
+      style="color:white;text-decoration:none;font-weight:bold;transition:color .3s;"
+      onmouseover="this.style.color='#00aaff'" onmouseout="this.style.color='white'">Previous</a>
+
+    <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
+
+    <a th:if="${hasNext}"
+      th:href="@{/search(query=${query}, mode=${mode}, page=${currentPage + 1})}"
+      style="color:white;text-decoration:none;font-weight:bold;transition:color .3s;"
+      onmouseover="this.style.color='#00aaff'" onmouseout="this.style.color='white'">Next</a>
+  </div>
 
 </body>
 </html>

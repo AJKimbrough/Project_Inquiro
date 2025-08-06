@@ -6,7 +6,7 @@ import java.net.URL;
 // Used to check if a URL is reachable. Responds to an HTTP HEAD request
 public class URLValidation {
 
-    // Check if a URL is reachable
+    // Check URL is reachable
     public static boolean isURLReachable(String urlStr) {
         try {
             URL url = new URL(urlStr); //Convert string to a URL object
@@ -15,7 +15,7 @@ public class URLValidation {
             // Timeout settings for the connection (ms)
             conn.setConnectTimeout(3000);
             conn.setReadTimeout(3000);
-            conn.setRequestMethod("HEAD"); //HTTP HEAD checks availability. Does not download.
+            conn.setRequestMethod("HEAD"); //HTTP HEAD checks availability. 
             
             // HTTP response code. True if 200–399.
             int responseCode = conn.getResponseCode();

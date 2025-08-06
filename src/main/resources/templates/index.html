@@ -12,7 +12,7 @@
       padding: 0;
     }
 
-    /* Navigation bar at top of page */
+    /* Top nav bar */
     nav {
       background-color: #111;
       padding: 15px 30px;
@@ -72,7 +72,7 @@
       padding: 0 5px;
     }
 
-     /* Expand search input on interaction */
+     /* Expand search input */
     .search-input-wrapper:hover,
     .search-input-wrapper:focus-within {
       width: 320px;
@@ -89,7 +89,7 @@
       color: black;
     }
 
-    /* Search button styling */
+    /* Search button */
     .search-input-wrapper button {
       background-color: black;
       color: white;
@@ -106,7 +106,7 @@
       background-color: #222;
     }
 
-    /* Style AND/OR/NOT dropdown */
+    /* AND/OR/NOT dropdown */
   .search-input-wrapper select {
     background-color: black;
     color: white;
@@ -131,19 +131,24 @@
 </head>
 <body>
 
-   <!-- Navigation links to login, image, and history pages -->
   <nav>
-    <a href="/login">Login</a>
-    <a href="/image">Image</a>
+    <!-- Admin-only link -->
+    <a th:if="${isAdmin == true}" href="/admin/cleanup">Admin</a>
     <a href="/history">History</a>
+
+  <!-- Auth toggles (use isAuthenticated) -->
+    <a th:if="${isAuthenticated == false}" href="/login">Login</a>
+    <a th:if="${isAuthenticated == true}" href="/logout">Logout</a>
   </nav>
 
-  <!-- Centered header and search form -->
+  <p th:if="${isAuthenticated}" style="margin:8px 30px; opacity:0.85;">
+    Logged in as: <strong th:text="${currentUser}">username</strong>
+  </p>
+
   <div class="content">
     <h1><a href="/">Inquiro</a></h1>
     <p>Discover. Explore. Inquiro.</p>
 
-    <!-- Search input form with Boolean logic selector -->
     <div class="search-form">
       <form action="/search" method="get" class="search-input-wrapper">
         <input type="text" name="query" placeholder="Uncover what matters..." required />

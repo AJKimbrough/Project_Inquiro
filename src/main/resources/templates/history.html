@@ -2,62 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Search History | Inquiro</title>
-  <!-- Navigation bar styled to match the rest of the app -->
-  <div class="top-nav">
-  <a href="/">Inquiro</a>
-</div>
+  <title>Search History</title>
   <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 40px;
-    }
+    body { background-color: black; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 60px 40px 40px 40px; }
+    .top-nav { position: absolute; top: 0; left: 0; padding: 15px 30px; }
+    .top-nav a { color: white; font-size: 1.5rem; text-decoration: none; font-weight: bold; }
+    .top-actions { position: absolute; top: 0; right: 0; padding: 15px 30px; display: flex; gap: 30px; align-items: center; }
+    .top-actions a, .top-actions button { color: white; background: transparent; border: none; text-decoration: none; font-weight: bold; cursor: pointer; transition: color 0.3s; }
+    .top-actions a:hover, .top-actions button:hover { color: #00aaff; }
 
-    h1 {
-      text-align: center;
-    }
+    h1 { text-align: center; margin-bottom: 20px; }
 
-    /* Styling for future entries */
-    ul {
-      list-style: none;
-      padding: 0;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    li {
-      background-color: #111;
-      padding: 10px 15px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-    }
-
-  /* Navigation styling */
-  .top-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 15px 30px;
-}
-
-.top-nav a {
-  color: white;
-  font-size: 1.5rem;
-  text-decoration: none;
-  font-weight: bold;
-}
-
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid #222; }
+    th { text-align: left; color: #00aaff; }
+    tbody tr:hover { background-color: #111; }
+    .empty { margin-top: 20px; text-align: center; color: #ccc; }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <h1>Search History 🚧🚧🚧🚧🚧</h1>
-  <ul>
-    <!-- Placeholder -->
-    <li>Feature coming soon...</li>
-  </ul>
+
+  <div class="top-nav"><a href="/">Inquiro</a></div>
+
+  <div class="top-actions">
+    <a href="/">Search</a>
+    <a th:if="${isAuthenticated == false}" href="/login">Login</a>
+    <a th:if="${isAuthenticated == true}" href="/logout">Logout</a>
+
+    <!-- Clear History -->
+    <form th:if="${!#lists.isEmpty(history)}" th:action="@{/history/clear}" method="post" style="margin:0;">
+      <button type="submit" onclick="return confirm('Clear your entire search history?');">Clear History</button>
+    </form>
+  </div>
+
+  <h1>Search History</h1>
+
+  <div th:if="${#lists.isEmpty(history)}" class="empty">No searches yet.</div>
+
+  <table th:if="${!#lists.isEmpty(history)}">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Search</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="item,iter : ${history}">
+        <td th:text="${iter.count}"></td>
+        <td>
+          <span th:text="${item.keyword}">query</span>
+          <span> (</span><span th:text="${item.mode}">OR</span><span>)</span>
+        </td>
+
+        <td th:text="${#temporals.format(item.searchTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+      </tr>
+    </tbody>
+  </table>
+
 </body>
 </html>

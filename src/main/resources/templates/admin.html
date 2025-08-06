@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Admin Cleanup – Project Inquiro</title>
 
-  <!-- Page styles -->
   <style>
     body {
       background-color: black;
@@ -35,7 +34,7 @@
       color: #00aaff;
     }
 
-    /* Main content container */
+    /* Main content */
     .content {
       text-align: center;
       padding-top: 100px;
@@ -45,7 +44,7 @@
       margin-bottom: 20px;
     }
 
-    /* URL list styling */
+    /* URL list */
     ul {
       list-style: none;
       padding: 0;
@@ -62,7 +61,6 @@
       text-align: left;
     }
 
-    /* Message styling */
     .success {
       color: #00ff88;
       font-weight: bold;
@@ -75,19 +73,15 @@
 </head>
 <body>
 
-<!-- Navigation bar with links to main pages -->
 <nav>
   <a href="/">Home</a>
-  <a href="/login">Login</a>
-  <a href="/image">Image</a>
+  <a href="/logout">Logout</a>
   <a href="/history">History</a>
 </nav>
 
-<!-- Content showing results -->
 <div class="content">
   <h1>Cleanup Summary</h1>
 
-  <!-- List of deleted URLs -->
   <ul>
     <!-- Loop through deletedUrls and show each URL that was removed -->
     <li th:each="url : ${deletedUrls}">
