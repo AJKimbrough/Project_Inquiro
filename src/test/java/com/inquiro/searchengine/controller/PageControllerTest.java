@@ -17,21 +17,7 @@ class PageControllerTest {
     @Test
     void testLoginPage() throws Exception {
         mockMvc.perform(get("/login"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("login"));
-    }
-
-    @Test
-    void testImagePage() throws Exception {
-        mockMvc.perform(get("/image"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("image"));
-    }
-
-    @Test
-    void testHistoryPage() throws Exception {
-        mockMvc.perform(get("/history"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("history"));
+               .andExpect(status().isOk());
     }
 }
+

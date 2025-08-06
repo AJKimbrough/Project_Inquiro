@@ -4,6 +4,7 @@ import com.inquiro.searchengine.service.SearchService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -12,19 +13,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AdminController.class)
+@AutoConfigureMockMvc(addFilters = false) // disable security filters
 class AdminControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    private SearchService searchService;
+    @SuppressWarnings("removal")
+    @MockBean
+    private SearchService searchService; // must match the @Autowired type in controller
 
     @Test
     void testCleanupOutdated() throws Exception {
         mockMvc.perform(get("/admin/cleanup"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin"))
-                .andExpect(model().attributeExists("message"));
+               .andExpect(status().isOk())
+               .andExpect(view().name("admin"))
+               .andExpect(model().attributeExists("message"));
 
         verify(searchService).deleteOutdatedUrls();
     }
