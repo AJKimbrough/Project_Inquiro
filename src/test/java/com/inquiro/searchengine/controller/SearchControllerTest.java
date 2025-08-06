@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(SearchController.class)
-@AutoConfigureMockMvc(addFilters = false) // Disable Spring Security filters
+@AutoConfigureMockMvc(addFilters = false) // Disable security 
 class SearchControllerTest {
 
     @Autowired
@@ -34,18 +34,16 @@ class SearchControllerTest {
 
     @Test
     void testSearchReturnsResults() throws Exception {
-        // Create a dummy search result
+        // dummy 
         SearchResultWithSource dummyResult = Mockito.mock(SearchResultWithSource.class);
         when(dummyResult.getTitle()).thenReturn("Java Basics");
         when(dummyResult.getUrl()).thenReturn("https://example.com/java");
         when(dummyResult.getDescription()).thenReturn("Intro to Java");
         when(dummyResult.getEngine()).thenReturn("TestEngine");
 
-        // Mock SearchService response
         when(searchService.search("java", "OR"))
                 .thenReturn(Collections.singletonList(dummyResult));
 
-        // Perform GET request and validate
         mockMvc.perform(get("/search")
                         .param("query", "java")
                         .param("mode", "OR"))

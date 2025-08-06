@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(SearchHistoryController.class)
-@AutoConfigureMockMvc(addFilters = false) // Disable Spring Security during test
+@AutoConfigureMockMvc(addFilters = false) // Disable security 
 class SearchHistoryControllerTest {
 
     @Autowired

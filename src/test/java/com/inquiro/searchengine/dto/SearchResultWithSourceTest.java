@@ -8,7 +8,6 @@ class SearchResultWithSourceTest {
 
     @Test
     void testField() {
-        // Arrange
         SearchResult result = new SearchResult();
         result.setTitle("Java Basics");
         result.setUrl("https://example.com/java");
@@ -16,10 +15,8 @@ class SearchResultWithSourceTest {
 
         String engineName = "ExactMatch";
 
-        // Act
         SearchResultWithSource wrapper = new SearchResultWithSource(result, engineName);
-
-        // Assert
+        
         assertEquals("Java Basics", wrapper.getTitle());
         assertEquals("https://example.com/java", wrapper.getUrl());
         assertEquals("A simple Java tutorial.", wrapper.getDescription());

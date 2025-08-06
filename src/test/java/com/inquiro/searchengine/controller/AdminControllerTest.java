@@ -21,7 +21,7 @@ class AdminControllerTest {
 
     @SuppressWarnings("removal")
     @MockBean
-    private SearchService searchService; // must match the @Autowired type in controller
+    private SearchService searchService; 
 
     @Test
     void testCleanupOutdated() throws Exception {

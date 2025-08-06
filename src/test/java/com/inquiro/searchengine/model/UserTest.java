@@ -36,6 +36,6 @@ class UserTest {
         String result = user.toString();
 
         assertThat(result).contains("admin");
-        assertThat(result).contains("role=ADMIN"); // Adjusted to match actual toString()
+        assertThat(result).contains("role=ADMIN"); 
     }
-} // ✅ This closing brace was missing
+} 

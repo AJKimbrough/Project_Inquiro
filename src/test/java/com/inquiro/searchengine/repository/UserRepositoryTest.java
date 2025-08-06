@@ -35,7 +35,6 @@ class UserRepositoryTest {
         User user = new User("kimbrough", "pw123", Role.GUEST);
         userRepository.save(user);
 
-        // Lookup
         Optional<User> result = userRepository.findByUsername("kimbrough");
 
         assertThat(result).isPresent();

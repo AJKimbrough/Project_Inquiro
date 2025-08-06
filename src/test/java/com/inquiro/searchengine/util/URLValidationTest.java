@@ -19,8 +19,6 @@ class URLValidationTest {
         URL spyUrl = spy(realUrl);
         doReturn(mockConnection).when(spyUrl).openConnection();
 
-        // Indirect way: inject mockConnection manually via reflection if you need,
-        // or just assume this logic test is enough:
         assertTrue(mockConnection.getResponseCode() >= 200 && mockConnection.getResponseCode() < 400);
     }
 
