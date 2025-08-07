@@ -2,28 +2,57 @@ USER MANUAL
 
 Inquiro: Search Engine
 
-Overview
-Inquiro is a Java-based web search engine built using Spring Boot and Thymeleaf. It supports multiple search modes (OR, AND, NOT), and includes an AutoCorrect feature.
+🔍 Overview
+  Inquiro is a Java-based web search engine built with Spring Boot, Thymeleaf, and MySQL. It supports:
+      - Multiple boolean search modes (OR, AND, NOT)
+      - AutoCorrect for typos (Levenshtein distance)
+      - Concurrent execution of ExactMatch and AutoCorrect engine
+      - Result deduplication
+      - URL validation for active links
+      - Role-based access (Admin and Guest)
 
-How to Use
-1. Go to the homepage.
-2. Enter your search term.
-3. Choose a search mode from the dropdown:
-   - OR: Match any word
-         utd engineering will return all results with utd or engineering
-   - AND: Match all words
-         utd engineering will return results with utd and engineering
-   - NOT: Exclude the specified word(s)
-         utd engineering will return all results with utd but no results with engineering
-4. Click **Search** to see results.
-  
-5. If you misspell a word, the AutoCorrect engine will return corrected results.
+Inquiro is live at:
+https://project-inquiro.onrender.com/
 
-Features
-- Concurrent search engine execution
-- AutoCorrect fallback using Levenshtein distance
-- Result deduplication
-- URL health checking
+
+🚀 How to Use
+  1. Access the Application
+      - Visit: https://project-inquiro.onrender.com
+
+  2. Log In
+      - Admin
+            -- Username: admin
+            -- Password: password123
+      - Guest
+            -- Username: guest
+            -- Password: password123
+  3. Perform a Search
+      - On the homepage, enter a search term (e.g., utd engineering).
+      - Select a Search Mode:
+      OR: Returns results containing any of the words.
+             utd engineering matches pages with either "utd" or "engineering".
+
+      AND: Returns results containing all of the words.
+            utd engineering matches only pages with both "utd" and "engineering".
+
+      NOT: Excludes the words after the first.
+            utd engineering matches pages with "utd" but not "engineering".
+
+      - Click Search.
+      - View results, labeled by ExactMatch or AutoCorrect engine.
+**** If a word is misspelled, AutoCorrect will offer suggestions and results. ****
+
+Admin Panel - Admin Only
+- Admins gain access to an additional Admin Page from the navbar.
+- Features include:
+      - Manual or batch URL health checks
+      - URL cleanup (remove broken links)
+      - Admin-only controls for managing content
+
+🕒 Search History
+- All users (guest and admin) can:
+- View previous searches in the History page
+- See the query term, mode, timestamp, and result count
 
 
 Known keywords to use for searches
@@ -37,3 +66,8 @@ Known keywords to use for searches
 * "linkedin", "apple                      *
 *******************************************
 
+No Results?
+If your search yields no results:
+      - Try different search modes (e.g., OR instead of AND)
+      - Try fewer keywords
+      - Check for typos (AutoCorrect may assist)
